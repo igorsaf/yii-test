@@ -1,0 +1,51 @@
+version: '3.8'
+services:
+  nginx:
+    build:
+      context: ./
+      dockerfile: docker/nginx.docker
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/ssl:/etc/nginx/ssl
+    ports:
+      - "4431:443"
+    depends_on:
+      - php-fpm
+
+  php-fpm:
+    build:
+      context: ./
+      dockerfile: docker/php-fpm.docker
+    volumes:
+      - ./:/var/www:delegated
+    environment:
+      DB_PORT: 3306
+      DB_HOST: mysql
+    depends_on:
+      - mysql
+
+  php-cli:
+    build:
+      context: ./
+      dockerfile: docker/php-cli.docker
+    volumes:
+      - ./:/var/www:delegated
+    environment:
+      DB_PORT: 3306
+      DB_HOST: mysql
+      COMPOSER_MEMORY_LIMIT: -1
+    depends_on:
+      - mysql
+    tty: true
+
+  mysql:
+    image: mysql:5.7
+    volumes:
+      - ./storage/docker/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+      MYSQL_DATABASE: app
+    ports:
+      - "33061:3306"

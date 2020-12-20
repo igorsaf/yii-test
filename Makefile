@@ -8,7 +8,7 @@ docker-build:
 	docker-compose up --build -d
 
 test:
-	docker-compose exec php-cli vendor/bin/phpunit
+	docker-compose exec php-cli vendor/bin/codecept run unit entities
 
 migrate:
 	docker-compose exec php-cli php artisan migrate

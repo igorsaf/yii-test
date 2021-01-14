@@ -12,10 +12,6 @@ return [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-	'bootstrap' => [
-		'log',
-		'app\bootstrap\bootstrap',
-	],
     'language' => 'en-US',
     'components' => [
         'db' => $db,

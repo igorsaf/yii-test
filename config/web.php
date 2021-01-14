@@ -6,10 +6,10 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
-	'bootstrap' => [
-		'log',
-		'app\bootstrap\bootstrap',
-	],
+    'bootstrap' => [
+    	'log',
+	    'app\bootstrap\ContainerBootstrap',
+    ],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -17,14 +17,21 @@ $config = [
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
-            'cookieValidationKey' => '6clYvNbyH7zxaph4Jl0CRqcpG0yyqadL',
+            'cookieValidationKey' => 'UCllbPQSvpWfwo-DNF1MUjT9ztK-Uqk0',
+	        'parsers' => [
+	        	'application/json' => 'yii\web\JsonParser',
+	        ]
         ],
+	    'response' => [
+			'format' => \yii\web\Response::FORMAT_JSON
+	    ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
+	        'enableSession' => false,
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
@@ -46,14 +53,15 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
+	        'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
+	            'POST api/v1/leads' => 'lead/create',
+	            'GET api/v1/leads' => 'lead/index'
             ],
         ],
-        */
     ],
     'params' => $params,
 ];
@@ -64,14 +72,14 @@ if (YII_ENV_DEV) {
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+	    'allowedIPs' => ['127.0.0.1', '::1', '172.*.*.*'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+        'allowedIPs' => ['127.0.0.1', '::1', '172.*.*.*'],
     ];
 }
 

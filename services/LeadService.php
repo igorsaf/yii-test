@@ -1,37 +1,37 @@
 <?php
 
+
 namespace app\services;
 
-use app\entities\Lead\Created;
-use app\entities\Lead\Id;
-use app\entities\Lead\Lead;
-use app\entities\Lead\Name;
-use app\entities\Lead\Source;
-use app\entities\Lead\Status;
-use app\services\dto\LeadCreateDto;
 
-class LeadService {
+use app\models\Lead;
+use app\repositories\LeadRepository;
+use yii\web\BadRequestHttpException;
 
+class LeadService
+{
 	private $leads;
-	private $dispatcher;
 
-	public function __construct(LeadRepository $leads, EventDispatcher $dispatcher)
+	public function __construct(LeadRepository $leads)
 	{
 		$this->leads = $leads;
-		$this->dispatcher = $dispatcher;
 	}
 
-	public function create(LeadCreateDto $dto): void
+	public function getList(array $filter = [], ?int $page = 0): array
 	{
-		$lead = new Lead(
-			Id::next(),
-			new Name($dto->name),
-			new Source($dto->source),
-			new Status($dto->status),
-			new Created($dto->created->at, $dto->created->by)
-		);
+		return $this->leads->getList($filter, $page);
+	}
 
-		$this->leads->add($lead);
-		$this->dispatcher->dispatch($lead->releaseEvents());
+	public function create(array $leadData):Lead
+	{
+		$lead = new Lead();
+
+		if (!$lead->load($leadData, '')) throw new BadRequestHttpException('Lead data not loaded');
+
+		if (!$lead->validate()) throw new BadRequestHttpException(implode(',', $lead->getErrorSummary(true)));
+
+		$this->leads->create($lead);
+
+		return $lead;
 	}
 }

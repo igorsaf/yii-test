@@ -2,21 +2,17 @@
 
 namespace app\repositories;
 
-use app\entities\Lead\Id;
-use app\entities\Lead\Lead;
+use app\models\Lead;
 
-interface LeadRepository
-{
-	/**
-	 * @param Id $id
-	 * @return Lead
-	 * @throws NotFoundException
-	 */
-	public function get(Id $id): Lead;
+interface LeadRepository {
 
-	public function add(Lead $lead): void;
+	public function getOne(int $id): Lead;
 
-	public function save(Lead $lead): void;
+	public function getList(array $filter, int $page): array;
+
+	public function create(Lead $lead): void;
+
+	public function update(Lead $lead): void;
 
 	public function remove(Lead $lead): void;
 }

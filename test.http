@@ -1,0 +1,60 @@
+### Получение лидов - без пагинация / фильтра
+GET https://localhost:4431/api/v1/leads
+Accept: application/json
+Authorization: Basic MTAwLXRva2VuOg==
+
+### Получение лидов, 3 страница
+GET https://localhost:4431/api/v1/leads
+Accept: application/json
+Authorization: Basic MTAwLXRva2VuOg==
+Content-Type: application/json
+
+{
+  "page": 3
+}
+
+### Получение лидов, фильтр по created_by
+GET https://localhost:4431/api/v1/leads
+Accept: application/json
+Authorization: Basic MTAwLXRva2VuOg==
+Content-Type: application/json
+
+{
+  "created_by": 100
+}
+
+### Получение лидов, фильтр по created_by и status, 2 страница
+GET https://localhost:4431/api/v1/leads
+Accept: application/json
+Authorization: Basic MTAwLXRva2VuOg==
+Content-Type: application/json
+
+{
+  "created_by": 100,
+  "status" : 1,
+  "page" : 2
+}
+
+### Создание лидов - пользователь 100
+POST https://localhost:4431/api/v1/leads
+Accept: application/json
+Authorization: Basic MTAwLXRva2VuOg==
+Content-Type: application/json
+
+{
+  "name" : "Test lead from user 100",
+  "status" : 1,
+  "source_id" : 1
+}
+
+### Создание лидов - пользователь 101
+POST https://localhost:4431/api/v1/leads
+Accept: application/json
+Authorization: Basic MTAxLXRva2VuOg==
+Content-Type: application/json
+
+{
+  "name" : "Test lead from user 101",
+  "status" : 2,
+  "source_id" : 3
+}

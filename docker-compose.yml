@@ -48,4 +48,4 @@ services:
       MYSQL_PASSWORD: app
       MYSQL_DATABASE: app
     ports:
-      - "33061:3306"
+      - "33060:3306"
